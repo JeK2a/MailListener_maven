@@ -8,37 +8,39 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class MyMessage {
-    private String    email_acount;
-    private String    direction;
-    private int       user_id;
-    private long      uid;
-    private String    message_id;
+    private final String    email_acount;
+    private final String    direction;
+    private final int       user_id;
+    private final long      uid;
+    private final String    message_id;
+    private final String    from;
+    private final String    to;
+    private final String    in_reply_to;
+    private final String    references;
+    private final Timestamp date;
+    private final long      size;
+    private final String    subject;
+    private final String    folder;
+
     private int       msgno;
-    private String    from;
-    private String    to;
-    private String    in_reply_to;
-    private String    references;
-    private Timestamp date;
-    private long      size;
-    private String    subject;
-    private String    folder;
 
-    private int       recent;
-    private int       flagged;
-    private int       answered;
-    private int       deleted;
-    private int       seen;
-    private int       draft;
-    private int       forwarded;
+    private final int       recent = 0; // TODO не берется из письма !!!
 
-    private int       label1;
-    private int       label2;
-    private int       label3;
-    private int       label4;
-    private int       label5;
-    private int       has_attachment;
+    private final int       flagged;
+    private final int       answered;
+    private final int       deleted;
+    private final int       seen;
+    private final int       draft;
+    private final int       forwarded;
 
-    private Timestamp udate;
+    private final int       label1;
+    private final int       label2;
+    private final int       label3;
+    private final int       label4;
+    private final int       label5;
+    private final int       has_attachment;
+
+    private final Timestamp udate;
 
     public MyMessage(
             String direction,
@@ -161,32 +163,16 @@ public class MyMessage {
         return direction;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
     public int getUser_id() {
         return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     public long getUid() {
         return uid;
     }
 
-    public void setUid(long uid) {
-        this.uid = uid;
-    }
-
     public String getMessage_id() {
         return message_id;
-    }
-
-    public void setMessage_id(String message_id) {
-        this.message_id = message_id;
     }
 
     public int getMsgno() {
@@ -201,180 +187,91 @@ public class MyMessage {
         return from;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
     public String getTo() {
         return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public String getIn_reply_to() {
         return in_reply_to;
     }
 
-    public void setIn_reply_to(String in_reply_to) {
-        this.in_reply_to = in_reply_to;
-    }
-
     public String getReferences() {
         return references;
-    }
-
-    public void setReferences(String references) {
-        this.references = references;
     }
 
     public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
     public long getSize() {
         return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public String getFolder() {
         return folder;
-    }
-
-    public void setFolder(String folder) {
-        this.folder = folder;
     }
 
     public int getRecent() {
         return recent;
     }
 
-    public void setRecent(int recent) {
-        this.recent = recent;
-    }
-
     public int getFlagged() {
         return flagged;
-    }
-
-    public void setFlagged(int flagged) {
-        this.flagged = flagged;
     }
 
     public int getAnswered() {
         return answered;
     }
 
-    public void setAnswered(int answered) {
-        this.answered = answered;
-    }
-
     public int getDeleted() {
         return deleted;
-    }
-
-    public void setDeleted(int deleted) {
-        this.deleted = deleted;
     }
 
     public int getSeen() {
         return seen;
     }
 
-    public void setSeen(int seen) {
-        this.seen = seen;
-    }
-
     public int getDraft() {
         return draft;
-    }
-
-    public void setDraft(int draft) {
-        this.draft = draft;
     }
 
     public int getUser() {
         return forwarded;
     }
 
-    public void setForwarded(int user) {
-        this.forwarded = forwarded;
-    }
-
     public Timestamp getUdate() {
         return udate;
-    }
-
-    public void setUdate(Timestamp udate) {
-        this.udate = udate;
     }
 
     public int getLabel1() {
         return label1;
     }
 
-    public void setLabel1(int label1) {
-        this.label1 = label1;
-    }
-
     public int getLabel2() {
         return label2;
-    }
-
-    public void setLabel2(int label2) {
-        this.label2 = label2;
     }
 
     public int getLabel3() {
         return label3;
     }
 
-    public void setLabel3(int label3) {
-        this.label3 = label3;
-    }
-
     public int getLabel4() {
         return label4;
-    }
-
-    public void setLabel4(int label4) {
-        this.label4 = label4;
     }
 
     public int getLabel5() {
         return label5;
     }
 
-    public void setLabel5(int label5) {
-        this.label5 = label5;
-    }
-
     public int getHas_attachment() {
         return has_attachment;
     }
 
-    public void setHas_attachment(int has_attachment) {
-        this.has_attachment = has_attachment;
-    }
-
     public boolean compareString(String str1, String str2, boolean is_print) {
-
         if (str1 != null) {
             str1 = new String(str1.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
             str1 = str1.replace("\n", "").trim();
@@ -383,22 +280,18 @@ public class MyMessage {
             str2 = new String(str2.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
             str2 = str2.replace("\n", "").trim();
         }
-
         if (
                 (str1 == null || str1.equals("") || str1.equals("null")) &&
                 (str2 == null || str2.equals("") || str2.equals("null"))
         ) {
             return true; // TODO null
         }
-
-        if (str1.toLowerCase().equals(str2.toLowerCase())) {
-            return true;
-        }
-
         if ((str1 == null || str2 == null) || (str1.equals("null") || str2.equals("null"))) {
             return ((str1 == null || str1.equals("null")) && (str2 == null || str2.equals("null")));
         }
-
+        if (str1.toLowerCase().equals(str2.toLowerCase())) {
+            return true;
+        }
         if (str1.length() != str2.length()) {
             if (is_print) {
                 System.out.println(str1 + "\u001B[91m" + "!!!!!!!!!!!! length= " + str1.length() + "\u001B[0m");

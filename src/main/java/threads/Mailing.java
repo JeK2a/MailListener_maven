@@ -169,7 +169,8 @@ public class Mailing implements Runnable {
                 imapFolder_tmp.forceClose();
             }
 
-            folder_tmp.getThread().stop();
+//            folder_tmp.getThread(). stop();
+            folder_tmp.getThread().isInterrupted();
             folder_tmp.getIdleManager().stop();
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +198,8 @@ public class Mailing implements Runnable {
             }
         }
 
-        emailAccount_tmp.getThread().stop();
+//        emailAccount_tmp.getThread().stop();
+        emailAccount_tmp.getThread().isInterrupted();
         emailAccounts.remove(account_name);
         addEmailAccount(emailAccount_tmp);
     }

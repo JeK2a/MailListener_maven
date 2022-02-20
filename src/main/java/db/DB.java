@@ -33,38 +33,26 @@ public class DB implements AutoCloseable {
     public  static int count_queries = 0;
     public  static boolean result    = false;
 
-    private String USER;
-    private String PASSWORD;
-    private String HOST;
-    private String PORT;
-    private String SCHEMA;
-    private String URL;
-
     public DB() {
-        new SettingsMail();
-
-        USER     = SettingsMail.getUser();
-        PASSWORD = SettingsMail.getPassword();
-        HOST     = SettingsMail.getHost();
-        PORT     = SettingsMail.getPort();
-        SCHEMA   = SettingsMail.getSchema();
-        URL      = "jdbc:mysql://" + HOST + ":" + PORT + "/" + SCHEMA;
-
-//        params[0] = "useSSL="            + SettingsMail.getUsessl();
-//        params[1] = "useUnicode="        + SettingsMail.getUseunicode();
-//        params[2] = "characterEncoding=" + SettingsMail.getCharacterencoding();
-
         connectToDB();
     }
 
     public boolean connectToDB() {
-
         boolean result = false;
 
         try {
             if (con != null && !con.isClosed()) {
                 return result = true;
             }
+
+            SettingsMail settingsMail = new SettingsMail();
+
+            String USER     = settingsMail.getUser();
+            String PASSWORD = settingsMail.getPassword();
+            String HOST     = settingsMail.getHost();
+            String PORT     = settingsMail.getPort();
+            String SCHEMA   = settingsMail.getSchema();
+            String URL      = "jdbc:mysql://" + HOST + ":" + PORT + "/" + SCHEMA;
 
             Class.forName("com.mysql.jdbc.Driver"); // MySQL 5
 //            Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL 8
@@ -88,6 +76,7 @@ public class DB implements AutoCloseable {
             return connectToDB();
         } finally {
             DB.result = result;
+
             return result;
         }
     }
@@ -102,8 +91,7 @@ public class DB implements AutoCloseable {
             email             == null ||
             email.getFolder() == null
         ) { // TODO проверить, в каких ситуациях может возникать и как влияет return
-            new NullPointerException();
-            return false;
+            throw new NullPointerException();
         }
 
         String query = "" +
@@ -269,6 +257,7 @@ public class DB implements AutoCloseable {
     }
 
     public ArrayList<User> getUsers() {
+        SettingsMail settingsMail = new SettingsMail();
 
         String query = "" +
             "SELECT " +
@@ -285,7 +274,7 @@ public class DB implements AutoCloseable {
             "    `settings`.`charset`, "    +
             "    `settings`.`secure`, "     +
             "    `users`.`success` "        +
-            "FROM `" + SettingsMail.getTable_users() + "` AS `users` " +
+            "FROM " + settingsMail.getTable_users() + " AS `users` " +
             "INNER JOIN `a_my_emails_settings` AS `settings` " +
             "   ON " +
             "       `users`.`email_provider` = `settings`.`provider` AND " +
@@ -363,8 +352,8 @@ public class DB implements AutoCloseable {
             "SELECT COUNT(`uid`) " +
             "FROM `a_api_emails` " +
             "WHERE " +
-            "    `email_account` = \"" + email_account + "\" AND " +
-            "    `folder`        = \"" + folder_name.replace("\"", "\\\"")   + "\" AND " +
+            "    `email_account` = '" + email_account + "' AND " +
+            "    `folder`        = '" + folder_name.replace("\"", "\\\"")   + "' AND " +
             "    `removed`       = 0;" ;
 
         long count_messages = 0;
@@ -549,8 +538,7 @@ public class DB implements AutoCloseable {
         return str.toString();
     }
 
-    public boolean setDeleteFlag(String email_address, String folder_name, long uid) { // TODO изменение флага сообщенией на удаленное (проверить)
-
+    public void setDeleteFlag(String email_address, String folder_name, long uid) { // TODO изменение флага сообщенией на удаленное (проверить)
         String query =
             "UPDATE `a_api_emails` " +
             "SET " +
@@ -562,13 +550,12 @@ public class DB implements AutoCloseable {
             "    `folder`        = '" + folder_name   + "' AND " +
             "    `uid`           = '" + uid           + "';";
 
-        return updateQuery(query);
+        updateQuery(query);
     }
 
-    public boolean setFlags(String email, String folder_name) { // Обнуление флагов у всех писем // TODO возможно выполнять на всем аккаунте, а не на одной папке
-
+    public void setFlags(String email, String folder_name) { // Обнуление флагов у всех писем // TODO возможно выполнять на всем аккаунте, а не на одной папке
         if (email.isEmpty() || folder_name.isEmpty()) {
-            new NullPointerException();
+            throw new NullPointerException();
         }
 
         String query =
@@ -597,13 +584,13 @@ public class DB implements AutoCloseable {
 //            query += String.format(" AND `folder` = '%s' ", folder_name);
 //        }
 
-        return updateQuery(query);
+        updateQuery(query);
     }
 
     public int setFlags(String email_account, String folder_name, String flag_name, int flag_value, String uids) { // Проставление флагов у определенных писем
         String query =
             "UPDATE `a_api_emails` " +
-            "SET `" + flag_name + "` = " + flag_value + " " +
+            "SET " + flag_name + " = " + flag_value + " " +
             "WHERE  " +
             "   `email_account` = '" + email_account + "' AND " +
             "   `folder`        = '" + folder_name   + "' AND " +
@@ -619,9 +606,7 @@ public class DB implements AutoCloseable {
             com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e
         ) {
             e.printStackTrace();
-            if (++count_errors > 10) {
-
-            } else {
+            if (++count_errors < 10) {
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
@@ -643,15 +628,15 @@ public class DB implements AutoCloseable {
         return result;
     }
 
-    public boolean setRemoved(String email, String folder_name, long uid_start, long uid_end, ArrayList<Long> uids) { // TODO можно ли объединить с setDelete
+    public void setRemoved(String email, String folder_name, long uid_start, long uid_end, ArrayList<Long> uids) { // TODO можно ли объединить с setDelete
         String query =
-                "UPDATE `a_api_emails` " +
-                "SET " +
-                "    `removed` = 1, " +
-                "    `time` = NOW() " +
-                "WHERE  " +
-                "   `folder`        = '" + folder_name + "' AND " +
-                "   `email_account` = '" + email       + "' ";
+            "UPDATE `a_api_emails` " +
+            "SET " +
+            "    `removed` = 1, " +
+            "    `time` = NOW() " +
+            "WHERE  " +
+            "   `folder`        = '" + folder_name + "' AND " +
+            "   `email_account` = '" + email       + "' ";
 
         if (uid_start > -1) {
             query += " AND `uid` >= " + uid_start + " ";
@@ -671,7 +656,7 @@ public class DB implements AutoCloseable {
             query += " AND `uid` NOT IN (" + str_uids + ") ";
         }
 
-        return updateQuery(query);
+        updateQuery(query);
     }
 
     public long[] getMissingUIDs(String email_address, String folder_name, long uid_start, long uid_end, ArrayList<Long> uids) {
@@ -722,9 +707,7 @@ public class DB implements AutoCloseable {
                 com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e
         ) {
             e.printStackTrace();
-            if (++count_errors > 10) {
-
-            } else {
+            if (++count_errors < 10) {
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
@@ -799,9 +782,8 @@ public class DB implements AutoCloseable {
                         com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e
         ) {
             e.printStackTrace();
-            if (++count_errors > 10) {
 
-            } else {
+            if (++count_errors < 10) {
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
@@ -918,9 +900,7 @@ public class DB implements AutoCloseable {
                 com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e
         ) {
             e.printStackTrace();
-            if (++count_errors > 10) {
-
-            } else {
+            if (++count_errors < 10) {
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {

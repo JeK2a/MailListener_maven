@@ -28,19 +28,19 @@ public class AddNewMessageThread implements Runnable {
 
     private static DB db;
 
-    private MyFolder     myFolder;
-    private IMAPFolder   imap_folder;
-    private EmailAccount emailAccount;
+    private final MyFolder     myFolder;
+    private final IMAPFolder   imap_folder;
+    private final EmailAccount emailAccount;
 
     private int user_id = 0;
     private String email_address;
     private String folder_name;
 
     private static int index = 0;
-    private static int count_errors = 0;
+    private static final int count_errors = 0;
 
-    private Session session;
-    private ExecutorService es;
+    private final Session session;
+    private final ExecutorService es;
 
 //    public AddNewMessageThread(EmailAccount emailAccount, MyFolder myFolder, IMAPFolder imap_folder) {
 //        if (db == null) {
@@ -154,8 +154,9 @@ public class AddNewMessageThread implements Runnable {
             }
 
             if (
-                messages_cout == 0 ||
-                period.getDays() >= 7
+                period != null && (
+                    messages_cout == 0 ||
+                    period.getDays() >= 7)
             ) {
                 myFolder.setStatus("sleep");
                 return;
@@ -169,10 +170,9 @@ public class AddNewMessageThread implements Runnable {
 
             int noop_sleep;
 
-            switch (folder_name) {
-                case "INBOX": noop_sleep = 30000; break; // TODO 60 000
-                default:      noop_sleep = 55000; break; // TODO 290 000
-            }
+            noop_sleep = "INBOX".equals(folder_name) ? 30000 : 55000;
+
+        // TODO 60 000  290 000
 
             while (!Thread.interrupted()) {
 //                if (reopenFolder("noop")) {
@@ -205,7 +205,7 @@ public class AddNewMessageThread implements Runnable {
         }
     }
 
-    private boolean checkOldMails(String email_address, String folder_name) throws MessagingException {
+    private boolean checkOldMails(String email_address, String folder_name) {
 
         try {
 
@@ -431,8 +431,8 @@ public class AddNewMessageThread implements Runnable {
 
             for (int j = 0; j < query_count; j++) {
 
-                long start = (j * query_buffer + 1);
-                long end   = ((j + 1) * query_buffer + 1);
+                long start = ((long) j * query_buffer + 1);
+                long end   = ((long) (j + 1) * query_buffer + 1);
 
                 if (end > messagesCount) {
                     end = messagesCount;
@@ -748,7 +748,7 @@ public class AddNewMessageThread implements Runnable {
             }
 
         } catch (NumberFormatException e) {
-            System.out.println(answer);
+            System.out.println(Arrays.toString(answer));
         } catch (Exception e) {
             myFolder.setException(e);
         } finally {

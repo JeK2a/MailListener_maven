@@ -23,8 +23,8 @@ import java.util.concurrent.ExecutorService;
 
 public class MailingEmailAccountThread implements Runnable {
 
-    private static DB db = new DB();
-    private EmailAccount emailAccount;
+    private static final DB db = new DB();
+    private final EmailAccount emailAccount;
     private static int index = 0;
 
     public MailingEmailAccountThread(EmailAccount emailAccount) {
@@ -37,12 +37,14 @@ public class MailingEmailAccountThread implements Runnable {
 
     @Override
     public void run() {
+        SettingsMail settingsMail = new SettingsMail();
+
         emailAccount.setStatus("start");
 
         MyProperties myProperties = new MyProperties(emailAccount.getUser()); // Настройка подключение текущего пользователя
 
         Session session = Session.getDefaultInstance(myProperties, null); // Создание сессии
-        session.setDebug(SettingsMail.getSession_debug());          // Включение дебага
+        session.setDebug(settingsMail.getSession_debug());          // Включение дебага
 
         try {
             ExecutorService es = myProperties.getEs();
@@ -71,7 +73,7 @@ public class MailingEmailAccountThread implements Runnable {
 
             emailAccount.setStatus("wait");
 
-            if (SettingsMail.getWaitUser()) {
+            if (settingsMail.getWaitUser()) {
                 while (!Thread.interrupted()) {
                     int n = 0;
 

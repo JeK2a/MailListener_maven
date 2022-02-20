@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class Email {
 
-    private static String[] folders_arr = new String[]{"Отправленные", "Sent", "Черновик", "Черновики", "Draft", "Drafts"};
+    private static final String[] folders_arr = new String[]{"Отправленные", "Sent", "Черновик", "Черновики", "Draft", "Drafts"};
 
     private int    id = 0;
     private String email_account;
@@ -91,8 +91,7 @@ public class Email {
 
 //            this.direction = (folder_name.equals("Исходящие") ? "out" : "in");
 
-            String cc = InternetAddress.toString(imap_message.getRecipients(Message.RecipientType.CC)); // TODO ERROR!!!
-            this.cc   = cc;
+            this.cc   = InternetAddress.toString(imap_message.getRecipients(Message.RecipientType.CC));
 
             String bcc = InternetAddress.toString(imap_message.getRecipients(Message.RecipientType.BCC));
             this.bcc   = (bcc == null || bcc.equals("") ? "null" : bcc);
@@ -133,10 +132,10 @@ public class Email {
             this.in_replay_to = (in_replay_to == null || in_replay_to.equals("") ? "null" : in_replay_to);
 
             Timestamp date = new Timestamp(imap_message.getReceivedDate().getTime());
-            this.date = (date == null ? new Timestamp(0) : new Timestamp(imap_message.getReceivedDate().getTime()));
+//            this.date = (date == null ? new Timestamp(0) : new Timestamp(imap_message.getReceivedDate().getTime()));
+            this.date = new Timestamp(imap_message.getReceivedDate().getTime());
 
-            int size  = imap_message.getSize();
-            this.size = size;
+            this.size = imap_message.getSize();
 
             String subject = removeBadChars(imap_message.getSubject());
             this.subject = (subject == null || subject.equals("") ? "null" : subject);
@@ -240,14 +239,6 @@ public class Email {
                 "}\n";
     }
 
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public String getDirection() {
         return direction;
     }
@@ -324,160 +315,40 @@ public class Email {
         return draft;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public void setUid(long uid) {
-        this.uid = uid;
-    }
-
-    public void setMessage_id(String message_id) {
-        this.message_id = message_id;
-    }
-
-    public void setMsgno(int msgno) {
-        this.msgno = msgno;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
     public String getCc() {
         return cc;
-    }
-
-    public void setCc(String cc) {
-        this.cc = cc;
     }
 
     public String getBcc() {
         return bcc;
     }
 
-    public void setBcc(String bcc) {
-        this.bcc = bcc;
-    }
-
-    public void setIn_replay_to(String in_replay_to) {
-        this.in_replay_to = in_replay_to;
-    }
-
-    public void setReferences(String references) {
-        this.references = references;
-    }
-
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void setFolder(String folder) {
-        this.folder = folder;
-    }
-
-    public void setRecent(int recent) {
-        this.recent = recent;
-    }
-
-    public void setFlagged(int flagged) {
-        this.flagged = flagged;
-    }
-
-    public void setAnswred(int answred) {
-        this.answred = answred;
-    }
-
-    public void setDeleted(int deleted) {
-        this.deleted = deleted;
-    }
-
-    public void setSeen(int seen) {
-        this.seen = seen;
-    }
-
-    public void setDraft(int draft) {
-        this.draft = draft;
-    }
-
     public int getUser() {
         return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
     }
 
     public int getLabel1() {
         return this.label1;
     }
 
-    public void setLabel1(int label1) {
-        this.label1 = label1;
-    }
-
     public int getLabel2() {
         return label2;
-    }
-
-    public void setLabel2(int label2) {
-        this.label2 = label2;
     }
 
     public int getLabel3() {
         return label3;
     }
 
-    public void setLabel3(int label3) {
-        this.label3 = label3;
-    }
-
     public int getLabel4() {
         return label4;
-    }
-
-    public void setLabel4(int label4) {
-        this.label4 = label4;
     }
 
     public int getLabel5() {
         return label5;
     }
 
-    public void setLabel5(int label5) {
-        this.label5 = label5;
-    }
-
     public int getHas_attachment() {
         return has_attachment;
-    }
-
-    public void setHas_attachment(int has_attachment) {
-        this.has_attachment = has_attachment;
-    }
-
-    public void setUpdate(Timestamp update) {
-        this.update = update;
     }
 
     public Timestamp getUpdate() {
@@ -488,45 +359,27 @@ public class Email {
         return forwarded;
     }
 
-    public void setForwarded(int forwarded) {
-        this.forwarded = forwarded;
-    }
-
     public String getEmail_account() {
         return email_account;
-    }
-
-    public void setEmail_account(String email_account) {
-        this.email_account = email_account;
     }
 
     public String getTdf_id() {
         return tdf_id;
     }
 
-    public void setTdf_id(String tdf_id) {
-        this.tdf_id = tdf_id;
-    }
-
     public String getFrom_decode() {
         return from_decode;
-    }
-
-    public void setFrom_decode(String from_decode) {
-        this.from_decode = from_decode;
     }
 
     public String getTo_decode() {
         return to_decode;
     }
 
-    public void setTo_decode(String to_decode) {
-        this.to_decode = to_decode;
-    }
-
     public static String removeBadChars(String s) {
-        if (s == null) return null;
-        StringBuffer sb = new StringBuffer();
+        if (s == null) { return null; }
+
+        StringBuilder sb = new StringBuilder();
+
         for (int i = 0 ; i < s.length() ; i++) {
             if (Character.isHighSurrogate(s.charAt(i))) { continue; }
             sb.append(s.charAt(i));
@@ -542,7 +395,7 @@ public class Email {
 
         String[] emails_arr = emails.split(",");
 
-        String decode = "";
+        StringBuilder decode = new StringBuilder();
 
         for (String email: emails_arr) {
             String[] parts = email.split(" ");
@@ -553,19 +406,19 @@ public class Email {
                     Matcher matcher = pattern.matcher(part);
 
                     if (matcher.find()) {
-                        decode += stringDecode(part);
+                        decode.append(stringDecode(part));
                     } else {
-                        decode += " " + part;
+                        decode.append(" ").append(part);
                     }
                 }
             }
 
-            decode += ",";
+            decode.append(",");
         }
 
-        decode = decode.substring(0, decode.length() - 1);
+        decode = new StringBuilder(decode.substring(0, decode.length() - 1));
 
-        return decode;
+        return decode.toString();
     }
 
     public static String stringDecode(String string) {
@@ -641,7 +494,8 @@ public class Email {
                     break;
                 case "iso-8859-1": // TODO 
                     if (str_arr[2].equals("b")) {
-                        decode = new String(Base64.getDecoder().decode(byteCp),  "iso-8859-1");
+//                        decode = new String(Base64.getDecoder().decode(byteCp),  "iso-8859-1");
+                        decode = new String(Base64.getDecoder().decode(byteCp), StandardCharsets.ISO_8859_1);
                     }
                     if (str_arr[2].equals("q")) {
                         decode = new String(QuotedPrintable.decode(byteCp, "iso-8859-1").getBytes(), StandardCharsets.UTF_8);
@@ -662,7 +516,7 @@ public class Email {
                     decode = new String(Base64.getDecoder().decode(byteCp),  "gb2312");
                     break;
                 case "cp1251": // TODO
-                    decode = new String(Base64.getDecoder().decode(byteCp),  "gb2312");
+                    decode = new String(Base64.getDecoder().decode(byteCp),  "cp1251");
                     break;
                 default: // TODO
                     decode = new String(Base64.getDecoder().decode(byteCp),  str_arr[1].toLowerCase());

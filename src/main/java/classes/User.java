@@ -1,19 +1,19 @@
 package classes;
 
 public class User {
-    private int     id;
-    private int     user_id;
-    private String  email;
-    private String  password;
-    private boolean is_monitoring;
-    private boolean is_default;
-    private String  host;
-    private int     port;
-    private String  login;
-    private String  name_from;
-    private String  charset;
-    private String  secure;
-    private int     success;
+    private final int     id;
+    private final int     user_id;
+    private final String  email;
+    private final String  password;
+    private final boolean is_monitoring;
+    private final boolean is_default;
+    private final String  host;
+    private final int     port;
+    private final String  login;
+    private final String  name_from;
+    private final String  charset;
+    private final String  secure;
+    private final int     success;
 
     public User(
                int     id,
@@ -42,7 +42,7 @@ public class User {
         this.name_from     = name_from    ;
         this.charset       = charset      ;
         this.secure        = secure       ;
-        this.success       = success      ;
+        this.success       = success       ;
     }
 
     @Override
@@ -107,5 +107,9 @@ public class User {
 
     public String getSecure() {
         return secure;
+    }
+
+    public int getSuccess() {
+        return success;
     }
 }

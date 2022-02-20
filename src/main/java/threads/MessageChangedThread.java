@@ -9,7 +9,7 @@ import java.net.*;
 
 public class MessageChangedThread implements Runnable {
 
-    private Email email;
+    private final Email email;
     private static int index = 0;
     private static int count = 0;
 

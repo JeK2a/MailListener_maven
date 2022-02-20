@@ -64,16 +64,8 @@ public class EmailAccount implements Serializable {
         return count_restart_noop;
     }
 
-    public void setCount_restart_noop(int count_restart_noop) {
-        this.count_restart_noop = count_restart_noop;
-    }
-
     public int getCount_restart_fail() {
         return count_restart_fail;
-    }
-
-    public void setCount_restart_fail(int count_restart_fail) {
-        this.count_restart_fail = count_restart_fail;
     }
 
     public long getTime_reconnect() {
@@ -129,7 +121,7 @@ public class EmailAccount implements Serializable {
             this.setStatus("error");
         }
 
-        StringBuilder exception_text = new StringBuilder(exception.toString() + "<br>" + exception.getMessage() + "<br>");
+        StringBuilder exception_text = new StringBuilder(exception + "<br>" + exception.getMessage() + "<br>");
 
         for (StackTraceElement element : exception.getStackTrace()) {
             exception_text.append("<br>").append(element.toString());
@@ -151,16 +143,8 @@ public class EmailAccount implements Serializable {
         return time_status_change;
     }
 
-    public void setTime_status_change(long time_status_change) {
-        this.time_status_change = time_status_change;
-    }
-
     public long getTime_last_event() {
         return time_last_event;
-    }
-
-    public void setTime_last_event(long time_last_event) {
-        this.time_last_event = time_last_event;
     }
 
     public ConcurrentHashMap<String, MyFolder> getFoldersMap() {
@@ -169,10 +153,6 @@ public class EmailAccount implements Serializable {
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public ConcurrentHashMap<String, MyFolder> getMyFoldersMap() {
@@ -201,16 +181,8 @@ public class EmailAccount implements Serializable {
         return event_count;
     }
 
-    public void setEvent_count(int event_count) {
-        this.event_count = event_count;
-    }
-
     public String getEmailAddress() {
         return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
     }
 
     public void eventCounterIncriminate() {
@@ -250,7 +222,7 @@ public class EmailAccount implements Serializable {
     }
 
     private String getJsonFromMap(ConcurrentHashMap<String, MyFolder> map) {
-        StringBuffer tmpStr = new StringBuffer("{ ");
+        StringBuilder tmpStr = new StringBuilder("{ ");
 
         for(Map.Entry<String, MyFolder> e: map.entrySet()){
             tmpStr.append("\"").append(e.getKey().replace("\"", "\\\\\"")).append("\": ").append(e.getValue()).append(",");

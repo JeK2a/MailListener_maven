@@ -107,10 +107,6 @@ public class MyFolder implements Cloneable {
         this.time_last_noop = new Date().getTime() / 1000;
     }
 
-    private void setException_text(String exception_text) {
-        this.exception_text = exception_text;
-    }
-
     public long getMessages_count() {
         return messages_count;
     }
@@ -119,24 +115,12 @@ public class MyFolder implements Cloneable {
         return time_last_noop;
     }
 
-    public void setTime_last_noop(long time_last_noop) {
-        this.time_last_noop = time_last_noop;
-    }
-
     public long getTime_status_change() {
         return time_status_change;
     }
 
-    public void setTime_status_change(long time_status_change) {
-        this.time_status_change = time_status_change;
-    }
-
     public long getTime_last_event() {
         return time_last_event;
-    }
-
-    public void setTime_last_event(long time_last_event) {
-        this.time_last_event = time_last_event;
     }
 
     public long getMessages_db_count() {
@@ -196,24 +180,12 @@ public class MyFolder implements Cloneable {
         return event_counter;
     }
 
-    public void setEvent_counter(int event_counter) {
-        this.event_counter = event_counter;
-    }
-
     public IMAPFolder getImap_folder() {
         return imap_folder;
     }
 
-    public void setImap_folder(IMAPFolder imap_folder) {
-        this.imap_folder = imap_folder;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void eventCountIncriminate() {
@@ -240,7 +212,7 @@ public class MyFolder implements Cloneable {
 
         this.setStatus("error");
 
-        StringBuilder exception_text = new StringBuilder(exception.toString() + "<br>" + exception.getMessage() + "<br>");
+        StringBuilder exception_text = new StringBuilder(exception + "<br>" + exception.getMessage() + "<br>");
 
         for (StackTraceElement element : exception.getStackTrace()) {
             exception_text.append("<br>").append(element.toString());

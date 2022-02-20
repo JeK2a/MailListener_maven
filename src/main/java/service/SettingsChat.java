@@ -50,7 +50,7 @@ public class SettingsChat {
             File file = new File("configChat.xml");
             doc = builder.parse(file);
         } catch (SAXException | ParserConfigurationException | IOException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
         }
 
         assert doc != null;
@@ -74,7 +74,7 @@ public class SettingsChat {
                         try {
                             nameServerPC = InetAddress.getLocalHost().getHostName();
                         } catch (UnknownHostException e) {
-                            System.err.println(e);
+                            e.printStackTrace();
                         }
                         break;
                 }

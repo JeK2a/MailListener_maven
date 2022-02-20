@@ -12,23 +12,23 @@ import java.io.IOException;
 // Получение настроек из XML файла
 public class SettingsMail {
 
-    private static String user;
-    private static String password;
-    private static String host;
-    private static String port;
-    private static String schema;
-    private static String usessl;
-    private static String useunicode;
-    private static String characterencoding;
+    private String user;
+    private String password;
+    private String host;
+    private String port;
+    private String schema;
+    private String usessl;
+    private String useunicode;
+    private String characterencoding;
 
-    private static String table_users;
-    private static String table_emails;
+    private String table_users;
+    private String table_emails;
 
-    private static String  mail_debug;
-    private static boolean session_debug;
+    private String  mail_debug;
+    private boolean session_debug;
 
-    private static boolean wait_folder;
-    private static boolean wait_user;
+    private boolean wait_folder;
+    private boolean wait_user;
 
     public SettingsMail() {
 
@@ -40,7 +40,7 @@ public class SettingsMail {
             File file = new File("config_my.xml");
             doc = builder.parse(file);
         } catch (SAXException | ParserConfigurationException | IOException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
         }
 
         assert doc != null;
@@ -76,59 +76,59 @@ public class SettingsMail {
         }
     }
 
-    public static String getUser() {
+    public String getUser() {
         return user;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public static String getHost() {
+    public String getHost() {
         return host;
     }
 
-    public static String getPort() {
+    public String getPort() {
         return port;
     }
 
-    public static String getSchema() {
+    public String getSchema() {
         return schema;
     }
 
-    public static String getUsessl() {
+    public String getUsessl() {
         return usessl;
     }
 
-    public static String getUseunicode() {
+    public String getUseunicode() {
         return useunicode;
     }
 
-    public static String getCharacterencoding() {
+    public String getCharacterencoding() {
         return characterencoding;
     }
 
-    public static String getMail_debug() {
+    public String getMail_debug() {
         return mail_debug;
     }
 
-    public static boolean getSession_debug() {
+    public boolean getSession_debug() {
         return session_debug;
     }
 
-    public static String getTable_users() {
+    public String getTable_users() {
         return table_users;
     }
 
-    public static boolean getWaitFolder() {
+    public boolean getWaitFolder() {
         return wait_folder;
     }
 
-    public static boolean getWaitUser() {
+    public boolean getWaitUser() {
         return wait_user;
     }
 
-    public static String getTable_emails() {
+    public String getTable_emails() {
         return table_emails;
     }
 }
